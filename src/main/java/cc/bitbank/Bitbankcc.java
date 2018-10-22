@@ -60,6 +60,7 @@ import cc.bitbank.entity.response.TickerResponse;
 import cc.bitbank.entity.response.TransactionsResponse;
 import cc.bitbank.entity.response.WithdrawResponse;
 import cc.bitbank.exception.BitbankException;
+import cc.bitbank.sugar.SugarKeyReader;
 
 /**
  * Created by tanaka on 2017/04/10.
@@ -80,7 +81,13 @@ public class Bitbankcc {
         this.apiSecret = secret;
         return this;
     }
-
+    
+    public Bitbankcc setKey(SugarKeyReader skr) {
+        this.apiKey = skr.getApiKey();
+        this.apiSecret = skr.getSecretKey();
+        return this;
+    }
+    
     private URIBuilder getPublicUriBuilder(String path) {
         URIBuilder builder = new URIBuilder();
         return builder.setScheme("https")
