@@ -32,10 +32,13 @@ public class SugarBuyer {
 	
 	public void sendBuyOrder() throws BitbankException, IOException {
 		BigDecimal buyPrice = calculateBuyPriceNormal();
-		BigDecimal buyPricelow = calculateBuyPriceLower();
 		BigDecimal buyAmount = calculateBuyAmount(buyPrice);
-//		Order order = bb.sendOrder(pair, BigDecimal.valueOf(50), BigDecimal.valueOf(1), OrderSide.BUY, OrderType.LIMIT);
-//		System.out.println(order);
+		BigDecimal buyPricelow = calculateBuyPriceLower();
+		BigDecimal buyAmountlow = calculateBuyAmount(buyPricelow);
+		Order order = bb.sendOrder(pair, buyPrice, buyAmount, OrderSide.BUY, OrderType.LIMIT);
+		System.out.println(order);
+		Order order2 = bb.sendOrder(pair, buyPricelow, buyAmountlow, OrderSide.BUY, OrderType.LIMIT);
+		System.out.println(order2);
 	}
 	
 	public BigDecimal calculateBuyAmount(BigDecimal buyPrice) {
@@ -43,7 +46,7 @@ public class SugarBuyer {
 		if(retValue.compareTo(minimumBuyAmount) < 0) {
 			retValue = minimumBuyAmount;
 		}
-		System.out.println("calculateBuyAmount: " + retValue);
+//		System.out.println("calculateBuyAmount: " + retValue);
 		return retValue;
 	}
 	
@@ -58,13 +61,13 @@ public class SugarBuyer {
 	private BigDecimal calculateBuyPrice(String percent1, String percent2) {
 		BigDecimal lastPrice = ticker.last;
 		BigDecimal lowPrice = ticker.low;
-		System.out.println("lastPrice:" + lastPrice + "/ lowPrice:" + lowPrice);
+//		System.out.println("lastPrice:" + lastPrice + "/ lowPrice:" + lowPrice);
 		lastPrice = lastPrice.multiply(new BigDecimal(percent1));
 	    lowPrice = lowPrice.multiply(new BigDecimal(percent2));
-	    System.out.println("#lastPrice:" + lastPrice + "/ #lowPrice:" + lowPrice);
+//	    System.out.println("#lastPrice:" + lastPrice + "/ #lowPrice:" + lowPrice);
 	    BigDecimal retValue = lastPrice.add(lowPrice);
 	    retValue = retValue.setScale(roundPrice, BigDecimal.ROUND_HALF_UP);
-	    System.out.println("calculateBuyPrice: " + retValue);
+//	    System.out.println("calculateBuyPrice: " + retValue);
 	    return retValue;
 	}
 }

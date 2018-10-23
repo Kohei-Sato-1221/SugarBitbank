@@ -16,22 +16,14 @@ public class SugarMain {
 	public static void main(String[] args){
 		Bitbankcc bb = new Bitbankcc();
 		bb.setKey(SugarKeyReader.getReader());
-		Ticker ticker;
-//		while(true) {
-			try{
-				ticker = bb.getTicker(CurrencyPair.XRP_JPY);
-				System.out.println(ticker.toString());
-				Order order = bb.sendOrder(CurrencyPair.XRP_JPY, BigDecimal.valueOf(50), BigDecimal.valueOf(1), OrderSide.BUY, OrderType.LIMIT);
-				System.out.println(order);
-			} catch (BitbankException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-			}
-//		}
+		try{
+			SugarBuyer xrpbuyer = new SugarBuyer(bb, CurrencyPair.XRP_JPY, new BigDecimal("300"), new BigDecimal("1"), 2, 2);
+			xrpbuyer.sendBuyOrder();
+		} catch (BitbankException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

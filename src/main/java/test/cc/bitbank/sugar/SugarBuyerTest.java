@@ -22,7 +22,8 @@ class SugarBuyerTest {
 		bb.setKey(SugarKeyReader.getReader());
 		SugarBuyer xrpbuyer = null;
 		try {
-			xrpbuyer = new SugarBuyer(bb, CurrencyPair.XRP_JPY, new BigDecimal("300"), new BigDecimal("1"), 2, 1);
+			xrpbuyer = new SugarBuyer(bb, CurrencyPair.XRP_JPY, new BigDecimal("300"), new BigDecimal("1"), 2, 2);
+			System.out.println(xrpbuyer);
 		} catch (BitbankException e) {
 			fail("BitbankException!!");
 			e.printStackTrace();
