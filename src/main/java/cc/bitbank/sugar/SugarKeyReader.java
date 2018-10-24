@@ -10,7 +10,8 @@ import java.util.stream.Stream;
 
 public class SugarKeyReader {
 	public static SugarKeyReader skr = new SugarKeyReader();
-	private final String KEY_FILE_PATH = "/Users/kohei.sato/bitbank.key";
+//	private final String KEY_FILE_PATH = "/Users/kohei.sato/bitbank.key";
+	private final String KEY_FILE_PATH = "/home/kohei.sato/work/bitbank.key";
 	private static HashMap<String, String> keyMap;
 	
 	private SugarKeyReader(){

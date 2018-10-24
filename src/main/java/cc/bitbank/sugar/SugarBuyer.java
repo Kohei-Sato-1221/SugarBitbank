@@ -33,10 +33,14 @@ public class SugarBuyer {
 	public void sendBuyOrder() throws BitbankException, IOException {
 		BigDecimal buyPrice = calculateBuyPriceNormal();
 		BigDecimal buyAmount = calculateBuyAmount(buyPrice);
+		System.out.println(buyPrice + " " + buyAmount);
+		Order order = bb.sendOrder(pair, buyPrice, buyAmount, OrderSide.BUY, OrderType.LIMIT);
+		System.out.println("" + order);
+	}
+	
+	public void sendBuyOrderLower() throws BitbankException, IOException {
 		BigDecimal buyPricelow = calculateBuyPriceLower();
 		BigDecimal buyAmountlow = calculateBuyAmount(buyPricelow);
-		Order order = bb.sendOrder(pair, buyPrice, buyAmount, OrderSide.BUY, OrderType.LIMIT);
-		System.out.println(order);
 		Order order2 = bb.sendOrder(pair, buyPricelow, buyAmountlow, OrderSide.BUY, OrderType.LIMIT);
 		System.out.println(order2);
 	}
@@ -44,6 +48,7 @@ public class SugarBuyer {
 	public BigDecimal calculateBuyAmount(BigDecimal buyPrice) {
 		BigDecimal retValue = baseAmountJPY.divide(buyPrice, roundAmt, BigDecimal.ROUND_HALF_UP);
 		if(retValue.compareTo(minimumBuyAmount) < 0) {
+			System.out.println("set minimuBuyAmount:" + minimumBuyAmount);
 			retValue = minimumBuyAmount;
 		}
 //		System.out.println("calculateBuyAmount: " + retValue);
@@ -69,5 +74,10 @@ public class SugarBuyer {
 	    retValue = retValue.setScale(roundPrice, BigDecimal.ROUND_HALF_UP);
 //	    System.out.println("calculateBuyPrice: " + retValue);
 	    return retValue;
+	}
+	
+	public void showTicker() throws BitbankException, IOException {
+		this.ticker = this.bb.getTicker(this.pair);
+		System.out.println(this.ticker); 
 	}
 }
