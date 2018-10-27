@@ -13,39 +13,43 @@ import cc.bitbank.exception.BitbankException;
 
 public class SugarBuyer {
 	private CurrencyPair pair;
-	private BigDecimal baseAmountJPY; 
+	private BigDecimal baseAmountJPY;
+	private BigDecimal baseAmountJPYLow; 
 	private BigDecimal minimumBuyAmount;
 	private int roundPrice = 0;
 	private int roundAmt = 0;
 	Bitbankcc bb;
 	Ticker ticker;
 	
-	public SugarBuyer(Bitbankcc bb, CurrencyPair pair, BigDecimal baseAmountJPY, BigDecimal minimumBuyAmount, int roundPrice, int roundAmt) throws BitbankException, IOException {
+	public SugarBuyer(Bitbankcc bb, CurrencyPair pair, BigDecimal baseAmountJPY, BigDecimal baseAmountJPYLow,BigDecimal minimumBuyAmount, int roundPrice, int roundAmt) throws BitbankException, IOException {
 		this.bb = bb;
 		this.pair = pair;
 		this.baseAmountJPY = baseAmountJPY;
+		this.baseAmountJPYLow = baseAmountJPYLow;
 		this.ticker = bb.getTicker(pair);
 		this.minimumBuyAmount = minimumBuyAmount;
 		this.roundPrice = roundPrice;
 		this.roundAmt = roundAmt;
 	}
 	
-	public void sendBuyOrder() throws BitbankException, IOException {
+	public String sendBuyOrder() throws BitbankException, IOException {
 		BigDecimal buyPrice = calculateBuyPriceNormal();
-		BigDecimal buyAmount = calculateBuyAmount(buyPrice);
+		BigDecimal buyAmount = calculateBuyAmount(buyPrice, baseAmountJPY);
 		System.out.println(buyPrice + " " + buyAmount);
 		Order order = bb.sendOrder(pair, buyPrice, buyAmount, OrderSide.BUY, OrderType.LIMIT);
 		System.out.println("" + order);
+		return "" + order;
 	}
 	
-	public void sendBuyOrderLower() throws BitbankException, IOException {
+	public String sendBuyOrderLower() throws BitbankException, IOException {
 		BigDecimal buyPricelow = calculateBuyPriceLower();
-		BigDecimal buyAmountlow = calculateBuyAmount(buyPricelow);
+		BigDecimal buyAmountlow = calculateBuyAmount(buyPricelow, baseAmountJPYLow);
 		Order order2 = bb.sendOrder(pair, buyPricelow, buyAmountlow, OrderSide.BUY, OrderType.LIMIT);
-		System.out.println(order2);
+		System.out.println("" + order2);
+		return "" + order2;
 	}
 	
-	public BigDecimal calculateBuyAmount(BigDecimal buyPrice) {
+	public BigDecimal calculateBuyAmount(BigDecimal buyPrice, BigDecimal baseAmountJPY) {
 		BigDecimal retValue = baseAmountJPY.divide(buyPrice, roundAmt, BigDecimal.ROUND_HALF_UP);
 		if(retValue.compareTo(minimumBuyAmount) < 0) {
 			System.out.println("set minimuBuyAmount:" + minimumBuyAmount);
