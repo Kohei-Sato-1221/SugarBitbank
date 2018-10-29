@@ -12,7 +12,6 @@ import cc.bitbank.sugar.restapi.RestClient;
 
 public class SugarMain {
 
-	//引数を検討する必要あり：keyfile, 実行するbuyerの
 	public static void main(String[] args){
 		String NEWLINE = System.lineSeparator();
 		Bitbankcc bb = new Bitbankcc();
@@ -24,10 +23,10 @@ public class SugarMain {
 		sb.append("Tsumitate Orders:");
 		sb.append(NEWLINE);
 		try{
-			buyers.add(new SugarBuyer(bb, CurrencyPair.BTC_JPY, new BigDecimal("150"), new BigDecimal("250"), new BigDecimal("0.0002"), 2, 4));
-			buyers.add(new SugarBuyer(bb, CurrencyPair.XRP_JPY, new BigDecimal("300"), new BigDecimal("300"), new BigDecimal("1"), 2, 2));
-			buyers.add(new SugarBuyer(bb, CurrencyPair.MONA_JPY, new BigDecimal("50"), new BigDecimal("75"), new BigDecimal("0.3"), 2, 2));
-			buyers.add(new SugarBuyer(bb, CurrencyPair.BCC_JPY, new BigDecimal("50"),  new BigDecimal("75"), new BigDecimal("0.0005"), 2, 4));
+			if(hasTradePair(args, "btc")) buyers.add(new SugarBuyer(bb, CurrencyPair.BTC_JPY, new BigDecimal("150"), new BigDecimal("250"), new BigDecimal("0.0002"), 2, 4));
+			if(hasTradePair(args, "xrp")) buyers.add(new SugarBuyer(bb, CurrencyPair.XRP_JPY, new BigDecimal("300"), new BigDecimal("300"), new BigDecimal("1"), 2, 2));
+			if(hasTradePair(args, "mona")) buyers.add(new SugarBuyer(bb, CurrencyPair.MONA_JPY, new BigDecimal("50"), new BigDecimal("75"), new BigDecimal("0.3"), 2, 2));
+			if(hasTradePair(args, "bcc")) buyers.add(new SugarBuyer(bb, CurrencyPair.BCC_JPY, new BigDecimal("50"),  new BigDecimal("75"), new BigDecimal("0.0005"), 2, 4));
 			for(SugarBuyer sbuyer : buyers) {
 				sb.append(sbuyer.sendBuyOrder());
 				sb.append(NEWLINE);
@@ -46,6 +45,18 @@ public class SugarMain {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	private static boolean hasTradePair(String[] args, String pair) {
+		if(args == null || args.length == 0) {
+			return true;
+		}
+		for(String tempPair : args) {
+			if(tempPair.equalsIgnoreCase(pair)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

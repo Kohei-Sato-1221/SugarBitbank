@@ -38,7 +38,7 @@ public class SugarBuyer {
 		System.out.println(buyPrice + " " + buyAmount);
 		Order order = bb.sendOrder(pair, buyPrice, buyAmount, OrderSide.BUY, OrderType.LIMIT);
 		System.out.println("" + order);
-		return "" + order;
+		return pair + " price:" + buyPrice + " vol:" + buyAmount;
 	}
 	
 	public String sendBuyOrderLower() throws BitbankException, IOException {
@@ -46,7 +46,7 @@ public class SugarBuyer {
 		BigDecimal buyAmountlow = calculateBuyAmount(buyPricelow, baseAmountJPYLow);
 		Order order2 = bb.sendOrder(pair, buyPricelow, buyAmountlow, OrderSide.BUY, OrderType.LIMIT);
 		System.out.println("" + order2);
-		return "" + order2;
+		return pair + " price:" + buyPricelow + " vol:" + buyAmountlow;
 	}
 	
 	public BigDecimal calculateBuyAmount(BigDecimal buyPrice, BigDecimal baseAmountJPY) {
@@ -55,7 +55,6 @@ public class SugarBuyer {
 			System.out.println("set minimuBuyAmount:" + minimumBuyAmount);
 			retValue = minimumBuyAmount;
 		}
-//		System.out.println("calculateBuyAmount: " + retValue);
 		return retValue;
 	}
 	
