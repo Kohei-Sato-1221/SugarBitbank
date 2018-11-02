@@ -21,6 +21,18 @@ public class SugarBuyer {
 	Bitbankcc bb;
 	Ticker ticker;
 	
+	public SugarBuyer(Bitbankcc bb, SugarOrderValues sov,BigDecimal minimumBuyAmount, int roundPrice, int roundAmt) throws BitbankException, IOException {
+		this.bb = bb;
+		this.pair = sov.getPair();
+		this.ticker = bb.getTicker(pair);
+		this.baseAmountJPY = sov.getBaseAmountJPY(bb);
+		this.baseAmountJPYLow = sov.getBaseAmountJPYLow(bb);
+		this.minimumBuyAmount = minimumBuyAmount;
+		this.roundPrice = roundPrice;
+		this.roundAmt = roundAmt;
+	}
+	
+	/*
 	public SugarBuyer(Bitbankcc bb, CurrencyPair pair, BigDecimal baseAmountJPY, BigDecimal baseAmountJPYLow,BigDecimal minimumBuyAmount, int roundPrice, int roundAmt) throws BitbankException, IOException {
 		this.bb = bb;
 		this.pair = pair;
@@ -31,10 +43,16 @@ public class SugarBuyer {
 		this.roundPrice = roundPrice;
 		this.roundAmt = roundAmt;
 	}
+	*/
 	
 	public String sendBuyOrder() throws BitbankException, IOException {
+		BigDecimal baseAmount = baseAmountJPY;
+		if(isBTCbasePair()) {
+			Ticker tickerForBTC = bb.getTicker(CurrencyPair.BTC_JPY);
+			baseAmount = baseAmountJPY.divide(tickerForBTC.last, 8, BigDecimal.ROUND_HALF_UP);			
+		}
 		BigDecimal buyPrice = calculateBuyPriceNormal();
-		BigDecimal buyAmount = calculateBuyAmount(buyPrice, baseAmountJPY);
+		BigDecimal buyAmount = calculateBuyAmount(buyPrice, baseAmount);
 		System.out.println(buyPrice + " " + buyAmount);
 		Order order = bb.sendOrder(pair, buyPrice, buyAmount, OrderSide.BUY, OrderType.LIMIT);
 		System.out.println("" + order);
@@ -42,8 +60,13 @@ public class SugarBuyer {
 	}
 	
 	public String sendBuyOrderLower() throws BitbankException, IOException {
+		BigDecimal baseAmount = baseAmountJPYLow;
+		if(isBTCbasePair()) {
+			Ticker tickerForBTC = bb.getTicker(CurrencyPair.BTC_JPY);
+			baseAmount = baseAmountJPYLow.divide(tickerForBTC.last, 8, BigDecimal.ROUND_HALF_UP);			
+		}
 		BigDecimal buyPricelow = calculateBuyPriceLower();
-		BigDecimal buyAmountlow = calculateBuyAmount(buyPricelow, baseAmountJPYLow);
+		BigDecimal buyAmountlow = calculateBuyAmount(buyPricelow, baseAmount);
 		Order order2 = bb.sendOrder(pair, buyPricelow, buyAmountlow, OrderSide.BUY, OrderType.LIMIT);
 		System.out.println("" + order2);
 		return pair + " price:" + buyPricelow + " vol:" + buyAmountlow;
@@ -82,5 +105,15 @@ public class SugarBuyer {
 	public void showTicker() throws BitbankException, IOException {
 		this.ticker = this.bb.getTicker(this.pair);
 		System.out.println(this.ticker); 
+	}
+	
+	private boolean isBTCbasePair() {
+		if(this.pair.equals(CurrencyPair.ETH_BTC) ||
+		   this.pair.equals(CurrencyPair.MONA_BTC) ||
+		   this.pair.equals(CurrencyPair.BCC_BTC) ||
+		   this.pair.equals(CurrencyPair.LTC_BTC) ) {
+			return true;
+		}
+		return false;
 	}
 }

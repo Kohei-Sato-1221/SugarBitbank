@@ -23,10 +23,22 @@ public class SugarMain {
 		sb.append("Tsumitate Orders:");
 		sb.append(NEWLINE);
 		try{
-			if(hasTradePair(args, "btc")) buyers.add(new SugarBuyer(bb, CurrencyPair.BTC_JPY, new BigDecimal("150"), new BigDecimal("250"), new BigDecimal("0.0002"), 2, 4));
-			if(hasTradePair(args, "xrp")) buyers.add(new SugarBuyer(bb, CurrencyPair.XRP_JPY, new BigDecimal("300"), new BigDecimal("300"), new BigDecimal("1"), 2, 2));
-			if(hasTradePair(args, "mona")) buyers.add(new SugarBuyer(bb, CurrencyPair.MONA_JPY, new BigDecimal("50"), new BigDecimal("75"), new BigDecimal("0.3"), 2, 2));
-			if(hasTradePair(args, "bcc")) buyers.add(new SugarBuyer(bb, CurrencyPair.BCC_JPY, new BigDecimal("50"),  new BigDecimal("75"), new BigDecimal("0.0005"), 2, 4));
+			SugarOrderValues btcValues = SugarKeyReader.getCoinValue(CurrencyPair.BTC_JPY);
+			btcValues = btcValues != null ? btcValues : new SugarOrderValues("btc_jpy", "150", "250");
+			SugarOrderValues xrpValues = SugarKeyReader.getCoinValue(CurrencyPair.XRP_JPY);
+			xrpValues = xrpValues != null ? xrpValues : new SugarOrderValues("xrp_jpy", "50", "75");
+			SugarOrderValues monaValues = SugarKeyReader.getCoinValue(CurrencyPair.MONA_JPY);
+			monaValues = monaValues != null ? monaValues : new SugarOrderValues("monac_jpy", "50", "75");
+			SugarOrderValues bccValues = SugarKeyReader.getCoinValue(CurrencyPair.BCC_JPY);
+			bccValues = bccValues != null ? bccValues : new SugarOrderValues("bcc_jpy", "50", "75");
+			SugarOrderValues ethValues = SugarKeyReader.getCoinValue(CurrencyPair.ETH_BTC);
+			ethValues = ethValues != null ? ethValues : new SugarOrderValues("eth_btc", "200", "200");
+			if(hasTradePair(args, "btc")) buyers.add(new SugarBuyer(bb, SugarKeyReader.getCoinValue(CurrencyPair.BTC_JPY), new BigDecimal("0.0002"), 2, 4));
+			if(hasTradePair(args, "xrp")) buyers.add(new SugarBuyer(bb, SugarKeyReader.getCoinValue(CurrencyPair.XRP_JPY), new BigDecimal("1"), 2, 2));
+			if(hasTradePair(args, "mona")) buyers.add(new SugarBuyer(bb, SugarKeyReader.getCoinValue(CurrencyPair.MONA_JPY), new BigDecimal("0.3"), 2, 2));
+			if(hasTradePair(args, "bcc")) buyers.add(new SugarBuyer(bb, SugarKeyReader.getCoinValue(CurrencyPair.BCC_JPY), new BigDecimal("0.0005"), 2, 4));
+			if(hasTradePair(args, "eth")) buyers.add(new SugarBuyer(bb, SugarKeyReader.getCoinValue(CurrencyPair.ETH_BTC), new BigDecimal("0.0001"), 8, 8));
+			
 			for(SugarBuyer sbuyer : buyers) {
 				sb.append(sbuyer.sendBuyOrder());
 				sb.append(NEWLINE);
@@ -42,7 +54,6 @@ public class SugarMain {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
