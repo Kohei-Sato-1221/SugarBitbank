@@ -3,6 +3,7 @@ package cc.bitbank.sugar;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cc.bitbank.Bitbankcc;
@@ -13,6 +14,8 @@ import cc.bitbank.sugar.restapi.RestClient;
 public class SugarMain {
 
 	public static void main(String[] args){
+		System.out.println("TSUMITATE ORDERS! " + new Date());
+		
 		String NEWLINE = System.lineSeparator();
 		Bitbankcc bb = new Bitbankcc();
 		List<SugarBuyer> buyers = new ArrayList<SugarBuyer>();
@@ -54,6 +57,8 @@ public class SugarMain {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
 	}

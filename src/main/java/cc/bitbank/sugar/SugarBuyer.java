@@ -45,7 +45,7 @@ public class SugarBuyer {
 	}
 	*/
 	
-	public String sendBuyOrder() throws BitbankException, IOException {
+	public String sendBuyOrder() throws BitbankException, IOException, NullPointerException{
 		BigDecimal baseAmount = baseAmountJPY;
 		if(isBTCbasePair()) {
 			Ticker tickerForBTC = bb.getTicker(CurrencyPair.BTC_JPY);
@@ -55,7 +55,12 @@ public class SugarBuyer {
 		BigDecimal buyAmount = calculateBuyAmount(buyPrice, baseAmount);
 		System.out.println(buyPrice + " " + buyAmount);
 		Order order = bb.sendOrder(pair, buyPrice, buyAmount, OrderSide.BUY, OrderType.LIMIT);
-		System.out.println("" + order);
+		if(order == null) {
+			System.out.println("Order result is Null! ");			
+		}else {
+			System.out.println("" + order);			
+			
+		}
 		return pair + " price:" + buyPrice + " vol:" + buyAmount;
 	}
 	
