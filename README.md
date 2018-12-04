@@ -1,3 +1,8 @@
+# SugarBitbank
+これはBitbankAPIを用いて仮想通貨の自動売買を行うプログラムです。
+BitbankのサンプルAPIをベースに開発されているプログラムです。
+APIキーや設定ファイルは外出となっています。
+
 # java-bitbankcc
 Java library for bitbank.cc, Bitcoin exchange.
 
